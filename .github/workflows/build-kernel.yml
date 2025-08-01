@@ -79,7 +79,7 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
     - name: Download Clang-aosp
-      if: env.USE_CUSTOM_CLANG == 'true'
+      if: env.USE_CUSTOM_CLANG == 'false'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         mkdir clang-aosp
@@ -87,7 +87,7 @@ jobs:
         tar -C clang-aosp/ -zxvf clang-${{ env.CLANG_VERSION }}.tar.gz
 
     - name: Download Custom-Clang
-      if: env.USE_CUSTOM_CLANG == 'true'
+      if: env.USE_CUSTOM_CLANG == 'false'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         if [[ ${{ env.CUSTOM_CLANG_SOURCE }} =~ git ]]; then
