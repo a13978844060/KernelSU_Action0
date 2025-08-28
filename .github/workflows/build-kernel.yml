@@ -124,57 +124,6 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} android-kernel --depth=1
-        
-
-    - name: Set Pack Method and KernelSU and SUSFS
-      run: |
-          # Variable
-          SUSFS_SOURCE=https://gitlab.com/simonpunk/susfs4ksu.git
-          SUSFS_BRANCH=kernel-${{ env.KERNEL_VERSION }}
-
-          # Set ${{ env.PACK_METHOD }} and KernelSU
-          if [[ ${{ env.PACK_METHOD }} == "Anykernel3" ]]; then
-            cd $GITHUB_WORKSPACE/device_kernel
-            if [[ -d "anykernel" ]]; then
-              echo "Found Anykernel3 in Kernel!"
-            else
-              git clone ${{ env.AK3_SOURCE }} -b ${{ env.AK3_BRANCH }} Anykernel3 --depth=1
-            fi
-          elif [[ ${{ env.PACK_METHOD }} == "MKBOOTIMG" ]]; then
-            cd $GITHUB_WORKSPACE
-            git clone https://android.googlesource.com/platform/system/tools/mkbootimg $GITHUB_WORKSPACE/mkboottools -b main-kernel-build-2024 --depth=1
-            wget ${{ env.BOOT_SOURCE }} -O $GITHUB_WORKSPACE/boot_source_${{ env.DEVICE_NAME }}.img
-            cd device_kernel
-          else
-            false
-          fi
-          echo "PACK_METHOD=${{ env.PACK_METHOD }}" >> $GITHUB_ENV
-
-          # Set SUSFS
-          if [[ "${{ env.SUSFS_ENABLE }}" == true ]]; then
-            if [[ "${{ env.SUSFS_FIXED }}" == true ]]; then
-              if [ -z "${{ env.PATCHES_SOURCE }}" ] || [ -z "${{ env.PATCHES_BRANCH }}" ]; then
-                echo "Please input vaild source and branch!"
-                false
-              elif [[ ${{ env.PATCHES_SOURCE }} == *".git" ]]; then
-                echo "Please do not set a full URL in PATCH_SOURCE!"
-                false
-              else
-                git clone https://github.com/${{ env.PATCHES_SOURCE }}.git -b ${{ env.PATCHES_BRANCH }} NonGKI_Kernel_Patches --depth=1 # It's not necessary.
-              fi
-            fi
-            git clone $SUSFS_SOURCE -b $SUSFS_BRANCH susfs4ksu --depth=1
-            cp susfs4ksu/kernel_patches/fs/* fs/
-            cp susfs4ksu/kernel_patches/include/linux/* include/linux/
-          else
-            echo "Disabled SUSFS !"
-          fi
-
-          # Remove Patch
-          git clone https://github.com/${{ env.PATCHES_SOURCE }}.git -b ${{ env.PATCHES_BRANCH }} NonGKI_Kernel_Patches --depth=1 # It's not necessary.
-          cp NonGKI_Kernel_Patches/kona_oos/realking_op8_rm_all_normal_patch.patch ./
-
-          patch -p1 < realking_op8_rm_all_normal_patch.patch || true
 
 
     - name: Download source boot image
@@ -191,8 +140,9 @@ jobs:
       if: env.ENABLE_KERNELSU == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
+        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
+        patch -p1 < 50_add_susfs_in_kernel-4.19.patch || true
 
     - name: Setup Configuration for Kernel
       run: |
