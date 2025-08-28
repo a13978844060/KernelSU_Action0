@@ -140,7 +140,8 @@ jobs:
       if: env.ENABLE_KERNELSU == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
+        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
+        #curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
         echo "UPLOADNAME=-KernelSU" >> $GITHUB_ENV
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         patch -p1 < ksu_hooks_sukisu_4.19.patch
@@ -148,8 +149,6 @@ jobs:
 
     - name: Remove Patch
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
         patch -p1 < 10_enable_susfs_for_ksu.patch
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
