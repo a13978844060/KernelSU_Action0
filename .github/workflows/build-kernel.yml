@@ -150,7 +150,7 @@ jobs:
     - name: Remove Patch
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
-        n | patch -p1 < 10_enable_susfs_for_ksu.patch
+        patch -p1 -n < 10_enable_susfs_for_ksu.patch
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         patch -p1 < 50_add_susfs_in_kernel-4.19.patch
         
