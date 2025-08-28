@@ -146,11 +146,11 @@ jobs:
         patch -p1 < ksu_hooks_sukisu_4.19.patch
 
 
-    - name: Remove Patch
-      run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
-        patch -p1 < 50_add_susfs_in_kernel-4.19.patch
+    #- name: Remove Patch
+      #run: |
+        #cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        #curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
+        #patch -p1 < 50_add_susfs_in_kernel-4.19.patch
 
     - name: Setup Configuration for Kernel
       run: |
