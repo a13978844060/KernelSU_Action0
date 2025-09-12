@@ -147,12 +147,12 @@ jobs:
         #patch -p1 < ksu_hooks_sukisu_4.19.patch
 
 
-    - name: Patch
-      run: |
+    #- name: Patch
+      #run: |
         #cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/KernelSU/
         #patch -p1  < 10_enable_susfs_for_ksu.patch
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        patch -p1 < 50_add_susfs_in_kernel-4.19.patch
+        #cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        #patch -p1 < 50_add_susfs_in_kernel-4.19.patch
         
     - name: Setup Configuration for Kernel
       run: |
