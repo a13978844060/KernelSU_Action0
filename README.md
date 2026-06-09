@@ -1,7 +1,11 @@
 **中文** | [English](README_EN.md)
+
 适用于oplus sm8250设备的自动化构建内核
+
 注：该内核已过时弃用！仓库构建脚本与内核长时间未更新
+
 推荐使用Bruce Teng大佬的最新内核
+
 # KernelSU Action
 
 用于 Non-GKI Kernel 的 Action，具有一定的普遍性，需要了解内核及 Android 的相关知识得以运用。
